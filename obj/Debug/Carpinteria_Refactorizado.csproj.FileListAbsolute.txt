@@ -1,0 +1,14 @@
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\bin\Debug\Carpinteria_Refactorizado.exe.config
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\bin\Debug\Carpinteria_Refactorizado.exe
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\bin\Debug\Carpinteria_Refactorizado.pdb
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.csproj.AssemblyReference.cache
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.Frm_Principal.resources
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.Properties.Resources.resources
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.csproj.GenerateResource.cache
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.csproj.CoreCompileInputs.cache
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.exe
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.pdb
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Alta_Presupuesto.resources
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Consultar_Detalles.resources
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Consultar_Presupuestos.resources
+C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Report.resources
