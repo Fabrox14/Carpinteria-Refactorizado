@@ -186,7 +186,7 @@ namespace Carpinteria_Refactorizado.gui
             {
                 if (oPresupuesto.Actualizar())
                 {
-                    MessageBox.Show("Presupuesto registrado", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("Presupuesto Actualizado", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Dispose();
                 }
                 else
