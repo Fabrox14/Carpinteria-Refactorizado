@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "dgSpecHash": "3N9LvZCGZTztSnLwhERnY0E3howRxEGg6/4c2O6DPKAPETX9mDOHxfN0sAaPNzvxpq5f24fJOtW7vC+NC8rm9Q==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\fabry\\source\\repos\\Carpinteria_Refactorizado\\Carpinteria_Refactorizado.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\fabry\\.nuget\\packages\\microsoft.reportingservices.reportviewercontrol.winforms\\140.340.80\\microsoft.reportingservices.reportviewercontrol.winforms.140.340.80.nupkg.sha512",
+    "C:\\Users\\fabry\\.nuget\\packages\\microsoft.sqlserver.types\\14.0.314.76\\microsoft.sqlserver.types.14.0.314.76.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1603",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Microsoft.ReportingServices.ReportViewerControl.Winforms 140.340.80 depende de Microsoft.SqlServer.Types (>= 14.0.0), pero no se encontró Microsoft.SqlServer.Types 14.0.0. Se resolvió una mejor coincidencia aproximada de Microsoft.SqlServer.Types 14.0.314.76.",
+      "libraryId": "Microsoft.SqlServer.Types",
+      "targetGraphs": [
+        ".NETFramework,Version=v4.7.2",
+        ".NETFramework,Version=v4.7.2/win",
+        ".NETFramework,Version=v4.7.2/win-x64",
+        ".NETFramework,Version=v4.7.2/win-x86"
+      ]
+    }
+  ]
+}
