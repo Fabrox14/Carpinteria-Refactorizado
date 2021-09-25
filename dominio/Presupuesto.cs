@@ -48,64 +48,10 @@ namespace Carpinteria_Refactorizado.dominio
             return total;
         }
 
-        public bool Confirmar()
-        {
-            bool resultado = true;
-            SqlConnection cnn = new SqlConnection();
-            SqlTransaction trans = null;
-
-            try
-            {
-
-                Total = calcularTotalDesc(this.CalcularTotal(), this.Descuento);
-
-                cnn.ConnectionString = @"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True";
-                cnn.Open();
-                trans = cnn.BeginTransaction();
-
-                SqlCommand cmd = new SqlCommand("SP_INSERTAR_MAESTRO", cnn, trans);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@cliente", this.Cliente);
-                cmd.Parameters.AddWithValue("@dto", this.Descuento);
-                cmd.Parameters.AddWithValue("@total", this.Total);
-
-                SqlParameter param = new SqlParameter("@presupuesto_nro", SqlDbType.Int);
-                param.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(param);
-                cmd.ExecuteNonQuery();
-                int presupuestoNro = Convert.ToInt32(param.Value);
-                int cDetalles = 1; // es el ID que forma de la PK doble entre ID_PRESUPUESTO E ID_DETALLE
-
-                foreach (DetallePresupuesto det in Detalles)
-                {
-                    SqlCommand cmdDet = new SqlCommand("SP_INSERTAR_DETALLE", cnn);
-                    cmdDet.CommandType = CommandType.StoredProcedure;
-                    cmdDet.Transaction = trans;
-                    cmdDet.Parameters.AddWithValue("@presupuesto_nro", presupuestoNro);
-                    cmdDet.Parameters.AddWithValue("@detalle", cDetalles);
-                    cmdDet.Parameters.AddWithValue("@id_producto", det.Producto.IdProducto);
-                    cmdDet.Parameters.AddWithValue("@cantidad", det.Cantidad);
-                    cmdDet.ExecuteNonQuery();
-                    cDetalles++;
-                }
-
-                trans.Commit();
-            }
-            catch (Exception ex)
-            {
-                trans.Rollback();
-                resultado = false;
-            }
-            finally
-            {
-                if (cnn != null && cnn.State == ConnectionState.Open)
-                {
-                    cnn.Close();
-                }
-            }
-
-            return resultado;
-        }
+        //public bool Confirmar()
+        //{
+        //  paso al DAO
+        //}
 
         public bool Actualizar()
         {

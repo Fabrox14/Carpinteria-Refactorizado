@@ -1,4 +1,6 @@
-﻿using Carpinteria_Refactorizado.dominio;
+﻿using Carpinteria_Refactorizado.accesoDatos;
+using Carpinteria_Refactorizado.dominio;
+using Carpinteria_Refactorizado.servicios;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,13 +17,11 @@ namespace Carpinteria_Refactorizado.gui
     public partial class Frm_Alta_Presupuesto : Form
     {
         private Presupuesto oPresupuesto;
+        private GestorPresupuesto gestor;
         private bool banderaUpdate = false;
         public Frm_Alta_Presupuesto()
         {
             InitializeComponent();
-
-            consultarUltimoPresupuesto();
-            cargarCombo();
 
             // Valores por defecto
             txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
@@ -31,53 +31,27 @@ namespace Carpinteria_Refactorizado.gui
 
             // Crear un nuevo Objeto Presupuesto
             oPresupuesto = new Presupuesto();
+            gestor = new GestorPresupuesto(new DAOFactory());
+
+            // Cargo los datos
+            consultarUltimoPresupuesto();
+            cargarCombo();
         }
 
         private void cargarCombo()
         {
-            SqlConnection cnn = new SqlConnection(@"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True");
-            cnn.Open();
-
-            // Command Productos
-            SqlCommand cmd2 = new SqlCommand("SP_CONSULTAR_PRODUCTOS", cnn);
-            cmd2.CommandType = CommandType.StoredProcedure;
-
-            DataTable tabla = new DataTable();
-            tabla.Load(cmd2.ExecuteReader());
+            DataTable tabla = gestor.ObtenerProductos();
 
             // tabla.Rows[0]; // cada fila que tenga va a ser un DataRow
 
             cboProducto.DataSource = tabla;
             cboProducto.DisplayMember = tabla.Columns[1].ColumnName; // n_producto
-            cboProducto.ValueMember = tabla.Columns[0].ColumnName; // id_producto
-
-            cnn.Close();
+            cboProducto.ValueMember = tabla.Columns[0].ColumnName; // id_producto 
         }
 
         private void consultarUltimoPresupuesto()
         {
-            SqlConnection cnn = new SqlConnection(@"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True");
-            cnn.Open();
-
-            // Command proximo ID
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cnn;
-
-            // Command Type para el Tipo de COmando que quiero ejecutar
-            // cmd.CommandText = CommandType.Text;  ejecutamos sql como texto plano
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SP_PROXIMO_ID";
-
-            SqlParameter param = new SqlParameter();
-            param.ParameterName = "@next";
-            param.SqlDbType = SqlDbType.Int;
-            param.Direction = ParameterDirection.Output;
-
-            cmd.Parameters.Add(param);
-            cmd.ExecuteNonQuery(); // no estoy esperando que el SP me devuelva un SELECT
-
-            cnn.Close();
-            lblNro.Text = "Presupuesto Nro: " + param.Value.ToString();
+            lblNro.Text = "Presupuesto Nro: " + gestor.ProximoPresupuesto();
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
@@ -181,6 +155,7 @@ namespace Carpinteria_Refactorizado.gui
             oPresupuesto.Cliente = txtCliente.Text;
             oPresupuesto.Descuento = Convert.ToDouble(txtDescuento.Text);
             oPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
+            oPresupuesto.Total = Convert.ToDouble(.Text);
 
             if(banderaUpdate)
             {
@@ -195,7 +170,7 @@ namespace Carpinteria_Refactorizado.gui
                 }
             } else
             {
-                if (oPresupuesto.Confirmar())
+                if (gestor.ConfirmarPresupuesto(oPresupuesto))
                 {
                     MessageBox.Show("Presupuesto registrado", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Dispose();

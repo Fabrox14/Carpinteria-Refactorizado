@@ -46,6 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="accesoDatos\AbstractDAOFactory.cs" />
+    <Compile Include="accesoDatos\DAOFactory.cs" />
+    <Compile Include="accesoDatos\IPresupuestoDAO.cs" />
+    <Compile Include="accesoDatos\PresupuestoDAO.cs" />
     <Compile Include="dominio\DetallePresupuesto.cs" />
     <Compile Include="dominio\Presupuesto.cs" />
     <Compile Include="dominio\Producto.cs" />
@@ -86,6 +90,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="servicios\GestorPresupuesto.cs" />
     <EmbeddedResource Include="gui\Frm_Alta_Presupuesto.resx">
       <DependentUpon>Frm_Alta_Presupuesto.cs</DependentUpon>
     </EmbeddedResource>
