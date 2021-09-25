@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="accesoDatos\AbstractDAOFactory.cs" />
     <Compile Include="accesoDatos\DAOFactory.cs" />
+    <Compile Include="accesoDatos\HelperDAO.cs" />
     <Compile Include="accesoDatos\IPresupuestoDAO.cs" />
     <Compile Include="accesoDatos\PresupuestoDAO.cs" />
     <Compile Include="dominio\DetallePresupuesto.cs" />

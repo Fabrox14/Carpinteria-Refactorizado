@@ -105,7 +105,7 @@ namespace Carpinteria_Refactorizado.gui
             double total = subTotal - desc;
             lblSubtotal.Text = "Subtotal: $" + subTotal.ToString();
             lblDescuento.Text = "Descuento: $" + desc.ToString();
-            lblTotal.Text = "Total: $" + total.ToString();
+            txtTotal.Text = total.ToString();
         }
 
         private bool ExisteProductoEnGrilla(string producto)
@@ -155,7 +155,7 @@ namespace Carpinteria_Refactorizado.gui
             oPresupuesto.Cliente = txtCliente.Text;
             oPresupuesto.Descuento = Convert.ToDouble(txtDescuento.Text);
             oPresupuesto.Fecha = Convert.ToDateTime(txtFecha.Text);
-            oPresupuesto.Total = Convert.ToDouble(.Text);
+            oPresupuesto.Total = Convert.ToDouble(txtTotal.Text);
 
             if(banderaUpdate)
             {

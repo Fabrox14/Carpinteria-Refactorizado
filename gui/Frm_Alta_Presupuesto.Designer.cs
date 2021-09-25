@@ -51,6 +51,7 @@ namespace Carpinteria_Refactorizado.gui
             this.txtFecha = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.lblNro = new System.Windows.Forms.Label();
+            this.txtTotal = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.nudCantidad)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalles)).BeginInit();
             this.SuspendLayout();
@@ -268,11 +269,20 @@ namespace Carpinteria_Refactorizado.gui
             this.lblNro.TabIndex = 17;
             this.lblNro.Text = "Presupuesto Nro:";
             // 
+            // txtTotal
+            // 
+            this.txtTotal.Enabled = false;
+            this.txtTotal.Location = new System.Drawing.Point(746, 479);
+            this.txtTotal.Name = "txtTotal";
+            this.txtTotal.Size = new System.Drawing.Size(133, 22);
+            this.txtTotal.TabIndex = 33;
+            // 
             // Frm_Alta_Presupuesto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(946, 580);
+            this.Controls.Add(this.txtTotal);
             this.Controls.Add(this.lblTotal);
             this.Controls.Add(this.lblDescuento);
             this.Controls.Add(this.lblSubtotal);
@@ -322,5 +332,6 @@ namespace Carpinteria_Refactorizado.gui
         private System.Windows.Forms.TextBox txtFecha;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label lblNro;
+        private System.Windows.Forms.TextBox txtTotal;
     }
 }
