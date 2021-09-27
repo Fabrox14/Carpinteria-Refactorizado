@@ -14,45 +14,12 @@ namespace Carpinteria_Refactorizado.accesoDatos
         // La interfaz asociada me obliga a implementar estos metodos
         public int ObtenerProximoNroPresupuesto()
         {
-            SqlConnection cnn = new SqlConnection(@"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True");
-            cnn.Open();
-
-            // Command proximo ID
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cnn;
-
-            // Command Type para el Tipo de COmando que quiero ejecutar
-            // cmd.CommandText = CommandType.Text;  ejecutamos sql como texto plano
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.CommandText = "SP_PROXIMO_ID";
-
-            SqlParameter param = new SqlParameter();
-            param.ParameterName = "@next";
-            param.SqlDbType = SqlDbType.Int;
-            param.Direction = ParameterDirection.Output;
-
-            cmd.Parameters.Add(param);
-            cmd.ExecuteNonQuery(); // no estoy esperando que el SP me devuelva un SELECT
-            cnn.Close();
-
-            return (int)param.Value;
+            return HelperDAO.ObtenerInstancia().ProximoID("SP_PROXIMO_ID", "@next");
         }
 
         public DataTable ListarProductos()
         {
-            SqlConnection cnn = new SqlConnection(@"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True");
-            cnn.Open();
-
-            // Command Productos
-            SqlCommand cmd2 = new SqlCommand("SP_CONSULTAR_PRODUCTOS", cnn);
-            cmd2.CommandType = CommandType.StoredProcedure;
-
-            DataTable tabla = new DataTable();
-            tabla.Load(cmd2.ExecuteReader());
-
-            cnn.Close();
-
-            return tabla;
+            return HelperDAO.ObtenerInstancia().ConsultaSQL("SP_CONSULTAR_PRODUCTOS");
         }
 
         public bool Crear(Presupuesto oPresupuesto)
