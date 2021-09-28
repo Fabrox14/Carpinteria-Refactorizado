@@ -97,5 +97,45 @@ namespace Carpinteria_Refactorizado.accesoDatos
                 }
             }
         }
+
+        public int EjecutarSQL(string nombreSP, Dictionary<string, object> parametros)
+        {
+            SqlConnection cnn = new SqlConnection();
+            SqlCommand cmd = new SqlCommand();
+            int filasAfectadas = 0;
+
+            try
+            {
+                cnn.ConnectionString = cadenaConexion;
+                cnn.Open();
+
+                // Command proximo ID
+                cmd.Connection = cnn;
+
+                // Command Type para el Tipo de COmando que quiero ejecutar
+                // cmd.CommandText = CommandType.Text;  ejecutamos sql como texto plano
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.CommandText = nombreSP;
+
+                foreach (var item in parametros)
+                {
+                    cmd.Parameters.AddWithValue(item.Key, item.Value);
+                }
+
+                filasAfectadas = cmd.ExecuteNonQuery();
+            }
+            catch (SqlException ex)
+            {
+                throw (ex);
+            }
+            finally
+            {
+                if (cnn.State == ConnectionState.Open)
+                {
+                    cnn.Close();
+                }
+            }
+            return filasAfectadas;
+        }
     }
 }
