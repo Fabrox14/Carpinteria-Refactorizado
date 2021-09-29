@@ -25,14 +25,16 @@ namespace Carpinteria_Refactorizado.accesoDatos
         public bool Crear(Presupuesto oPresupuesto)
         {
             bool resultado = true;
+            /*
             Dictionary<string, object> parametros = new Dictionary<string, object>();
             parametros.Add("@presupuesto_nro", 9);
             parametros.Add("@detalle_nro", 3);
             parametros.Add("@id_producto", 1);
             parametros.Add("@cantidad", 5);
             HelperDAO.ObtenerInstancia().EjecutarSQL("SP_INSERTAR_DETALLE", parametros);
+            */
 
-            /*
+            
             SqlConnection cnn = new SqlConnection();
             SqlTransaction trans = null;
 
@@ -82,7 +84,7 @@ namespace Carpinteria_Refactorizado.accesoDatos
                     cnn.Close();
                 }
             }
-            */
+            
             return resultado;
         }
     }
