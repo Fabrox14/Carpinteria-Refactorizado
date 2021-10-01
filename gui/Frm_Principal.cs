@@ -20,7 +20,7 @@ namespace Carpinteria_Refactorizado
 
         private void nuevoPresupuestoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Frm_Alta_Presupuesto frmNuevo = new Frm_Alta_Presupuesto();
+            Frm_Alta_Presupuesto frmNuevo = new Frm_Alta_Presupuesto(Accion.CREATE, 0);
             frmNuevo.ShowDialog();
         }
 

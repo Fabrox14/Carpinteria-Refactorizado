@@ -112,9 +112,8 @@ namespace Carpinteria_Refactorizado.gui
 
         private void ConsultarDetalle(int idPresupuesto)
         {
-            Frm_Consultar_Detalles frmDetalles = new Frm_Consultar_Detalles();
-            frmDetalles.nroPresupuesto(idPresupuesto);
-            frmDetalles.ShowDialog();
+            Frm_Alta_Presupuesto detalles = new Frm_Alta_Presupuesto(Accion.READ, idPresupuesto);
+            detalles.ShowDialog();
         }
 
         private void btnEliminar_Click(object sender, EventArgs e)
@@ -183,8 +182,7 @@ namespace Carpinteria_Refactorizado.gui
         private void editarPresupuesto(int idPresupuesto)
         {
             // Rellenar el de Alta Presupuesto
-            Frm_Alta_Presupuesto frmAlta = new Frm_Alta_Presupuesto();
-            frmAlta.CargarDatos(idPresupuesto);
+            Frm_Alta_Presupuesto frmAlta = new Frm_Alta_Presupuesto(Accion.UPDATE, idPresupuesto);
             frmAlta.ShowDialog();
             Validar();
         }

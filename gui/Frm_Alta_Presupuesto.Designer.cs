@@ -301,6 +301,7 @@ namespace Carpinteria_Refactorizado.gui
             this.Controls.Add(this.lblNro);
             this.Name = "Frm_Alta_Presupuesto";
             this.Text = "Nuevo Presupuesto";
+            this.Load += new System.EventHandler(this.Frm_Alta_Presupuesto_Load);
             ((System.ComponentModel.ISupportInitialize)(this.nudCantidad)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDetalles)).EndInit();
             this.ResumeLayout(false);

@@ -29,15 +29,11 @@ namespace Carpinteria_Refactorizado.gui
         private bool banderaUpdate = false;
         private Accion modo;
 
-        public Frm_Alta_Presupuesto(Accion modo, int nro)
+        public Frm_Alta_Presupuesto(Accion modo, int nro_presupuesto)
         {
             InitializeComponent();
 
-            // Valores por defecto
-            txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
-            txtCliente.Text = "CONSUMIDOR FINAL";
-            txtDescuento.Text = "0";
-            cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
+            
 
             // Crear un nuevo Objeto Presupuesto
             this.modo = modo;
@@ -45,9 +41,41 @@ namespace Carpinteria_Refactorizado.gui
             gestor = new GestorPresupuesto(new DAOFactory());
 
             // Cargo los datos
-            consultarUltimoPresupuesto();
-            cargarCombo();
+           
 
+            if (modo.Equals(Accion.READ))
+            {
+                txtFecha.Enabled = false;
+                txtCliente.Enabled = false;
+                txtDescuento.Enabled = false;
+                nudCantidad.Enabled = false;
+                cboProducto.Enabled = false;
+                btnAceptar.Enabled = false;
+                btnAgregar.Enabled = false;
+                this.Text = "VER PRESUPUESTO";
+                this.CargarDatos(nro_presupuesto);
+            }
+
+            if (modo.Equals(Accion.UPDATE))
+            {
+                CargarDatos(nro_presupuesto);
+                cargarCombo();
+                // Valores por defecto
+            }
+        }
+
+        private void Frm_Alta_Presupuesto_Load(object sender, EventArgs e)
+        {
+            if (modo.Equals(Accion.CREATE))
+            {
+                consultarUltimoPresupuesto();
+                cargarCombo();
+                // Valores por defecto
+                txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
+                txtCliente.Text = "CONSUMIDOR FINAL";
+                txtDescuento.Text = "0";
+                cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
+            }
         }
 
         private void cargarCombo()
