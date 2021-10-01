@@ -27,8 +27,8 @@ namespace Carpinteria_Refactorizado.accesoDatos
             bool resultado = true;
             /*
             Dictionary<string, object> parametros = new Dictionary<string, object>();
-            parametros.Add("@presupuesto_nro", 9);
-            parametros.Add("@detalle_nro", 3);
+            parametros.Add("@presupuesto_nro", 18);
+            parametros.Add("@detalle_nro", 5);
             parametros.Add("@id_producto", 1);
             parametros.Add("@cantidad", 5);
             HelperDAO.ObtenerInstancia().EjecutarSQL("SP_INSERTAR_DETALLE", parametros);
@@ -37,6 +37,7 @@ namespace Carpinteria_Refactorizado.accesoDatos
             
             SqlConnection cnn = new SqlConnection();
             SqlTransaction trans = null;
+            Dictionary<string, object> parametros = new Dictionary<string, object>();
 
             try
             {
@@ -56,9 +57,12 @@ namespace Carpinteria_Refactorizado.accesoDatos
                 cmd.ExecuteNonQuery();
                 int presupuestoNro = Convert.ToInt32(param.Value);
                 int cDetalles = 1; // es el ID que forma de la PK doble entre ID_PRESUPUESTO E ID_DETALLE
+                int filasAfectadas = 0;
+                
 
                 foreach (DetallePresupuesto det in oPresupuesto.Detalles)
                 {
+
                     SqlCommand cmdDet = new SqlCommand("SP_INSERTAR_DETALLE", cnn);
                     cmdDet.CommandType = CommandType.StoredProcedure;
                     cmdDet.Transaction = trans;
@@ -67,8 +71,18 @@ namespace Carpinteria_Refactorizado.accesoDatos
                     cmdDet.Parameters.AddWithValue("@id_producto", det.Producto.IdProducto);
                     cmdDet.Parameters.AddWithValue("@cantidad", det.Cantidad);
                     cmdDet.ExecuteNonQuery();
+
+
+                    //parametros.Add("@presupuesto_nro", presupuestoNro);
+                    //parametros.Add("@detalle", cDetalles);
+                    //parametros.Add("@id_producto", det.Producto.IdProducto);
+                    //parametros.Add("@cantidad", det.Cantidad);
+                    //filasAfectadas = HelperDAO.ObtenerInstancia().EjecutarSQL("SP_INSERTAR_DETALLE", parametros);
+                    //parametros.Clear();
+
                     cDetalles++;
                 }
+
 
                 trans.Commit();
             }
@@ -85,6 +99,7 @@ namespace Carpinteria_Refactorizado.accesoDatos
                 }
             }
             
+
             return resultado;
         }
     }

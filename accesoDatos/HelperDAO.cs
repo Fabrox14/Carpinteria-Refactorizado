@@ -102,8 +102,7 @@ namespace Carpinteria_Refactorizado.accesoDatos
         {
             SqlConnection cnn = new SqlConnection();
             SqlCommand cmd = new SqlCommand();
-            int filasAfectadas = 0;
-
+            SqlTransaction trans = null;
             try
             {
                 cnn.ConnectionString = cadenaConexion;
@@ -111,21 +110,27 @@ namespace Carpinteria_Refactorizado.accesoDatos
 
                 // Command proximo ID
                 cmd.Connection = cnn;
+                trans = cnn.BeginTransaction();
 
                 // Command Type para el Tipo de COmando que quiero ejecutar
                 // cmd.CommandText = CommandType.Text;  ejecutamos sql como texto plano
                 cmd.CommandType = CommandType.StoredProcedure;
                 cmd.CommandText = nombreSP;
 
-                foreach (var item in parametros)
+                cmd.Transaction = trans;
+
+                foreach (KeyValuePair<string, object> item in parametros)
                 {
                     cmd.Parameters.AddWithValue(item.Key, item.Value);
                 }
 
-                filasAfectadas = cmd.ExecuteNonQuery();
+                int filasAfectadas = cmd.ExecuteNonQuery();
+                trans.Commit();
+                return filasAfectadas;
             }
             catch (SqlException ex)
             {
+                trans.Rollback();
                 throw (ex);
             }
             finally
@@ -135,7 +140,6 @@ namespace Carpinteria_Refactorizado.accesoDatos
                     cnn.Close();
                 }
             }
-            return filasAfectadas;
         }
     }
 }

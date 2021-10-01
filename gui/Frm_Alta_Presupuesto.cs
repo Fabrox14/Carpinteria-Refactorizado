@@ -14,12 +14,22 @@ using System.Windows.Forms;
 
 namespace Carpinteria_Refactorizado.gui
 {
+    public enum Accion
+    {
+        CREATE,
+        READ,
+        UPDATE,
+        DELETE
+    }
+
     public partial class Frm_Alta_Presupuesto : Form
     {
         private Presupuesto oPresupuesto;
         private GestorPresupuesto gestor;
         private bool banderaUpdate = false;
-        public Frm_Alta_Presupuesto()
+        private Accion modo;
+
+        public Frm_Alta_Presupuesto(Accion modo, int nro)
         {
             InitializeComponent();
 
@@ -30,12 +40,14 @@ namespace Carpinteria_Refactorizado.gui
             cboProducto.DropDownStyle = ComboBoxStyle.DropDownList;
 
             // Crear un nuevo Objeto Presupuesto
+            this.modo = modo;
             oPresupuesto = new Presupuesto();
             gestor = new GestorPresupuesto(new DAOFactory());
 
             // Cargo los datos
             consultarUltimoPresupuesto();
             cargarCombo();
+
         }
 
         private void cargarCombo()
