@@ -58,18 +58,19 @@ namespace Carpinteria_Refactorizado.gui
 
             if (modo.Equals(Accion.UPDATE))
             {
+                banderaUpdate = true;
+                this.Text = "EDITAR PRESUPUESTO";
                 CargarDatos(nro_presupuesto);
-                cargarCombo();
-                // Valores por defecto
             }
         }
 
         private void Frm_Alta_Presupuesto_Load(object sender, EventArgs e)
         {
+            this.cargarCombo();
+
             if (modo.Equals(Accion.CREATE))
             {
                 consultarUltimoPresupuesto();
-                cargarCombo();
                 // Valores por defecto
                 txtFecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
                 txtCliente.Text = "CONSUMIDOR FINAL";
@@ -234,7 +235,6 @@ namespace Carpinteria_Refactorizado.gui
         // -------------------------------- UPDATE -------------------------------------
         internal void CargarDatos(int idPresupuesto)
         {
-            banderaUpdate = true;
             SqlConnection cnn = new SqlConnection();
 
             try

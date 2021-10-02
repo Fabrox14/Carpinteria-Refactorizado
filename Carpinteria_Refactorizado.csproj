@@ -60,12 +60,6 @@
     <Compile Include="gui\Frm_Alta_Presupuesto.Designer.cs">
       <DependentUpon>Frm_Alta_Presupuesto.cs</DependentUpon>
     </Compile>
-    <Compile Include="gui\Frm_Consultar_Detalles.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="gui\Frm_Consultar_Detalles.Designer.cs">
-      <DependentUpon>Frm_Consultar_Detalles.cs</DependentUpon>
-    </Compile>
     <Compile Include="gui\Frm_Consultar_Presupuestos.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,9 +88,6 @@
     <Compile Include="servicios\GestorPresupuesto.cs" />
     <EmbeddedResource Include="gui\Frm_Alta_Presupuesto.resx">
       <DependentUpon>Frm_Alta_Presupuesto.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="gui\Frm_Consultar_Detalles.resx">
-      <DependentUpon>Frm_Consultar_Detalles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="gui\Frm_Consultar_Presupuestos.resx">
       <DependentUpon>Frm_Consultar_Presupuestos.cs</DependentUpon>
