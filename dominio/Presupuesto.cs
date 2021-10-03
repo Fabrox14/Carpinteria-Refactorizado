@@ -53,70 +53,20 @@ namespace Carpinteria_Refactorizado.dominio
         //  paso al DAO
         //}
 
-        public bool Actualizar()
-        {
-            bool resultado = true;
-            SqlConnection cnn = new SqlConnection();
-            SqlTransaction trans = null;
+        //public bool Actualizar()
+        //{
+        //    paso al DAO            
+        //}
 
-            try
-            {
-                Total = calcularTotalDesc(this.CalcularTotal(), this.Descuento);
-
-                cnn.ConnectionString = @"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True";
-                cnn.Open();
-                trans = cnn.BeginTransaction();
-
-                SqlCommand cmd = new SqlCommand("SP_UPDATE_PRESUPUESTOS", cnn, trans);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@nro_presupuesto", this.PresupuestoNro);
-                cmd.Parameters.AddWithValue("@cliente", this.Cliente);
-                cmd.Parameters.AddWithValue("@dto", this.Descuento);
-                cmd.Parameters.AddWithValue("@total", this.Total);
-                cmd.ExecuteNonQuery();
-
-                SqlCommand cmdElimnar = new SqlCommand("SP_ELIMINAR_DETALLE_PRESUPUESTO", cnn, trans);
-                cmdElimnar.CommandType = CommandType.StoredProcedure;
-                cmdElimnar.Parameters.AddWithValue("@presupuesto_nro", this.PresupuestoNro);
-                cmdElimnar.ExecuteNonQuery();
-
-
-                int cDetalles = 1; // es el ID que forma de la PK doble entre ID_PRESUPUESTO E ID_DETALLE
-                foreach (DetallePresupuesto det in Detalles)
-                {
-                    // SqlCommand cmdDet = new SqlCommand("SP_UPDATE_DETALLES_PRESUPUESTO", cnn);
-                    SqlCommand cmdDet = new SqlCommand("[SP_INSERTAR_DETALLE]", cnn);
-                    cmdDet.CommandType = CommandType.StoredProcedure;
-                    cmdDet.Transaction = trans;
-                    cmdDet.Parameters.AddWithValue("@presupuesto_nro", this.PresupuestoNro);
-                    cmdDet.Parameters.AddWithValue("@detalle", cDetalles);
-                    cmdDet.Parameters.AddWithValue("@id_producto", det.Producto.IdProducto);
-                    cmdDet.Parameters.AddWithValue("@cantidad", det.Cantidad);
-                    cmdDet.ExecuteNonQuery();
-                    cDetalles++;
-                }
-
-                trans.Commit();
-            }
-            catch (Exception ex)
-            {
-                trans.Rollback();
-                resultado = false;
-            }
-            finally
-            {
-                if (cnn != null && cnn.State == ConnectionState.Open)
-                {
-                    cnn.Close();
-                }
-            }
-
-            return resultado;
-        }
-
-        private double calcularTotalDesc(double total, double descuento)
+        public double calcularTotalDesc(double total, double descuento)
         {
             return total - ((descuento * total) / 100);
+        }
+
+        public string GetFechaBajaFormato()
+        {
+            string aux = FechaBaja.ToString("dd/MM/yyyy");
+            return aux.Equals("01/01/0001") ? "" : aux;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Carpinteria_Refactorizado.dominio;
+using Carpinteria_Refactorizado.servicios;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -24,7 +25,6 @@ namespace Carpinteria_Refactorizado.accesoDatos
 
         public bool Crear(Presupuesto oPresupuesto)
         {
-            bool resultado = true;
             /*
             Dictionary<string, object> parametros = new Dictionary<string, object>();
             parametros.Add("@presupuesto_nro", 18);
@@ -34,73 +34,27 @@ namespace Carpinteria_Refactorizado.accesoDatos
             HelperDAO.ObtenerInstancia().EjecutarSQL("SP_INSERTAR_DETALLE", parametros);
             */
 
-            
-            SqlConnection cnn = new SqlConnection();
-            SqlTransaction trans = null;
-            Dictionary<string, object> parametros = new Dictionary<string, object>();
+            return HelperDAO.ObtenerInstancia().Save(oPresupuesto);
+        }
 
-            try
-            {
-                cnn.ConnectionString = @"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True";
-                cnn.Open();
-                trans = cnn.BeginTransaction();
+        public Presupuesto ObtenerPresupuestoPorID(int id)
+        {
+            return HelperDAO.ObtenerInstancia().GetById(id);
+        }
 
-                SqlCommand cmd = new SqlCommand("SP_INSERTAR_MAESTRO", cnn, trans);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@cliente", oPresupuesto.Cliente);
-                cmd.Parameters.AddWithValue("@dto", oPresupuesto.Descuento);
-                cmd.Parameters.AddWithValue("@total", oPresupuesto.Total);
+        public List<Presupuesto> ConsultarPresupuestos(List<Parametro> criterios)
+        {
+            return HelperDAO.ObtenerInstancia().GetByFilters(criterios);
+        }
 
-                SqlParameter param = new SqlParameter("@presupuesto_nro", SqlDbType.Int);
-                param.Direction = ParameterDirection.Output;
-                cmd.Parameters.Add(param);
-                cmd.ExecuteNonQuery();
-                int presupuestoNro = Convert.ToInt32(param.Value);
-                int cDetalles = 1; // es el ID que forma de la PK doble entre ID_PRESUPUESTO E ID_DETALLE
-                int filasAfectadas = 0;
-                
+        public bool RegistrarBajaPresupuesto(int idPresupuesto)
+        {
+            return HelperDAO.ObtenerInstancia().Delete(idPresupuesto);
+        }
 
-                foreach (DetallePresupuesto det in oPresupuesto.Detalles)
-                {
-
-                    SqlCommand cmdDet = new SqlCommand("SP_INSERTAR_DETALLE", cnn);
-                    cmdDet.CommandType = CommandType.StoredProcedure;
-                    cmdDet.Transaction = trans;
-                    cmdDet.Parameters.AddWithValue("@presupuesto_nro", presupuestoNro);
-                    cmdDet.Parameters.AddWithValue("@detalle", cDetalles);
-                    cmdDet.Parameters.AddWithValue("@id_producto", det.Producto.IdProducto);
-                    cmdDet.Parameters.AddWithValue("@cantidad", det.Cantidad);
-                    cmdDet.ExecuteNonQuery();
-
-
-                    //parametros.Add("@presupuesto_nro", presupuestoNro);
-                    //parametros.Add("@detalle", cDetalles);
-                    //parametros.Add("@id_producto", det.Producto.IdProducto);
-                    //parametros.Add("@cantidad", det.Cantidad);
-                    //filasAfectadas = HelperDAO.ObtenerInstancia().EjecutarSQL("SP_INSERTAR_DETALLE", parametros);
-                    //parametros.Clear();
-
-                    cDetalles++;
-                }
-
-
-                trans.Commit();
-            }
-            catch (Exception ex)
-            {
-                trans.Rollback();
-                resultado = false;
-            }
-            finally
-            {
-                if (cnn != null && cnn.State == ConnectionState.Open)
-                {
-                    cnn.Close();
-                }
-            }
-            
-
-            return resultado;
+        public bool ActualizarPresupuesto(Presupuesto oPresupuesto)
+        {
+            return HelperDAO.ObtenerInstancia().Update(oPresupuesto);
         }
     }
 }

@@ -18,6 +18,10 @@ namespace Carpinteria_Refactorizado.servicios
             dao = factory.CrearPresupuestoDAO();
         }
 
+
+
+
+
         public int ProximoPresupuesto()
         {
             return dao.ObtenerProximoNroPresupuesto();
@@ -31,6 +35,26 @@ namespace Carpinteria_Refactorizado.servicios
         public bool ConfirmarPresupuesto(Presupuesto oPresupuesto)
         {
             return dao.Crear(oPresupuesto);
+        }
+
+        public Presupuesto ObtenerPresupuestoPorID(int nro)
+        {
+            return dao.ObtenerPresupuestoPorID(nro);
+        }
+
+        public List<Presupuesto> ConsultarPresupuestos(List<Parametro> filtros)
+        {
+            return dao.ConsultarPresupuestos(filtros);
+        }
+
+        public bool RegistrarBajaPresupuesto(int idPresupuesto)
+        {
+            return dao.RegistrarBajaPresupuesto(idPresupuesto);
+        }
+
+        public bool ActualizarPresupuesto(Presupuesto oPresupuesto)
+        {
+            return dao.ActualizarPresupuesto(oPresupuesto);
         }
     }
 }

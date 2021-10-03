@@ -9,7 +9,6 @@ C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refa
 C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.exe
 C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.pdb
 C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Alta_Presupuesto.resources
-C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Consultar_Detalles.resources
 C:\Users\fabry\source\repos\Carpinteria_Refactorizado\obj\Debug\Carpinteria_Refactorizado.gui.Frm_Consultar_Presupuestos.resources
 C:\Users\fabry\source\repos\Carpinteria_Refactorizado\bin\Debug\Microsoft.ReportViewer.Common.dll
 C:\Users\fabry\source\repos\Carpinteria_Refactorizado\bin\Debug\Microsoft.ReportViewer.Common.resources.dll

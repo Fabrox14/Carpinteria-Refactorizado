@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Carpinteria_Refactorizado.accesoDatos;
+using Carpinteria_Refactorizado.dominio;
+using Carpinteria_Refactorizado.servicios;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,9 +16,15 @@ namespace Carpinteria_Refactorizado.gui
 {
     public partial class Frm_Consultar_Presupuestos : Form
     {
+        private Presupuesto oPresupuesto;
+        private GestorPresupuesto gestor;
+
         public Frm_Consultar_Presupuestos()
         {
             InitializeComponent();
+
+            oPresupuesto = new Presupuesto();
+            gestor = new GestorPresupuesto(new DAOFactory());
         }
 
         private void btnConsultar_Click(object sender, EventArgs e)
@@ -39,52 +48,37 @@ namespace Carpinteria_Refactorizado.gui
             string baja;
             baja = chkBaja.Checked == true ? "S" : "N";
 
-            ConsultarPresupuesto(fechaDesde, fechaHasta, cliente, baja);
+
+            List<Parametro> filtros = new List<Parametro>();
+
+            Parametro fecha_desde = new Parametro();
+            fecha_desde.Nombre = "@fecha_desde";
+            fecha_desde.Valor = fechaDesde;
+            filtros.Add(fecha_desde);
+            filtros.Add(new Parametro("@fecha_hasta", fechaHasta));
+
+            filtros.Add(new Parametro("@cliente", cliente));
+
+            filtros.Add(new Parametro("@datos_baja", baja));
+
+            ConsultarPresupuesto(filtros);
         }
 
-        private void ConsultarPresupuesto(DateTime fechaDesde, DateTime fechaHasta, string cliente, string baja)
+        private void ConsultarPresupuesto(List<Parametro> filtros)
         {
-            SqlConnection cnn = new SqlConnection();
+            List<Presupuesto> lst = gestor.ConsultarPresupuestos(filtros);
 
-            try
+            dgvResultados.Rows.Clear();
+            foreach (Presupuesto oPresupuesto in lst)
             {
-                cnn.ConnectionString = @"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True";
-                cnn.Open();
-
-                SqlCommand cmd = new SqlCommand("SP_CONSULTAR_PRESUPUESTOS", cnn);
-                cmd.CommandType = CommandType.StoredProcedure;
-                cmd.Parameters.AddWithValue("@fecha_desde", fechaDesde);
-                cmd.Parameters.AddWithValue("@fecha_hasta", fechaHasta);
-                cmd.Parameters.AddWithValue("@cliente", cliente);
-                cmd.Parameters.AddWithValue("@datos_baja", baja);
-
-                DataTable table = new DataTable();
-                table.Load(cmd.ExecuteReader());
-                cnn.Close();
-
-                dgvResultados.Rows.Clear();
-                for (int i = 0; i < table.Rows.Count; i++)
-                {
-                    dgvResultados.Rows.Add(new object[]{
-                                        table.Rows[i]["presupuesto_nro"],
-                                        table.Rows[i]["fecha"],
-                                        table.Rows[i]["cliente"],
-                                        table.Rows[i]["descuento"],
-                                        table.Rows[i]["total"],
-                                        table.Rows[i]["fecha_baja"]
-                 });
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar los Presupuestos");
-            }
-            finally
-            {
-                if (cnn != null && cnn.State == ConnectionState.Open)
-                {
-                    cnn.Close();
-                }
+                dgvResultados.Rows.Add(new object[]{
+                                        oPresupuesto.PresupuestoNro,
+                                        oPresupuesto.Fecha.ToString("dd/MM/yyyy"),
+                                        oPresupuesto.Cliente,
+                                        oPresupuesto.Descuento,
+                                        oPresupuesto.Total,
+                                        oPresupuesto.GetFechaBajaFormato()
+                 }); ;
             }
         }
 
@@ -126,14 +120,19 @@ namespace Carpinteria_Refactorizado.gui
                 if (eliminarPresupuesto(idPresupuesto))
                 {
                     // MessageBox.Show(idPresupuesto.ToString());
-                    dgvResultados.Rows.Remove(dgvResultados.CurrentRow);
+                    // dgvResultados.Rows.Remove(dgvResultados.CurrentRow);
+                    MessageBox.Show("Presupuesto eliminado!", "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.btnConsultar_Click(null, null);
+                } else
+                {
+                    MessageBox.Show("Error al intentar borrar el presupuesto!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
 
         private bool eliminarPresupuesto(int idPresupuesto)
         {
-            bool resultado = true;
+            bool resultado = gestor.RegistrarBajaPresupuesto(idPresupuesto);
 
             SqlConnection cnn = new SqlConnection();
             SqlTransaction trans = null;

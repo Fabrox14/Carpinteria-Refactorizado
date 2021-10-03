@@ -53,14 +53,14 @@ namespace Carpinteria_Refactorizado.gui
                 btnAceptar.Enabled = false;
                 btnAgregar.Enabled = false;
                 this.Text = "VER PRESUPUESTO";
-                this.CargarDatos(nro_presupuesto);
+                this.CargarPresupuesto(nro_presupuesto);
             }
 
             if (modo.Equals(Accion.UPDATE))
             {
                 banderaUpdate = true;
                 this.Text = "EDITAR PRESUPUESTO";
-                CargarDatos(nro_presupuesto);
+                CargarPresupuesto(nro_presupuesto);
             }
         }
 
@@ -188,6 +188,19 @@ namespace Carpinteria_Refactorizado.gui
                 return;
             }
 
+            if (txtCliente.Text.Trim() == "")
+            {
+                MessageBox.Show("Debe ingresar un tipo de cliente", "Validaciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtCliente.Focus();
+                return;
+            }
+            if (txtDescuento.Text.Trim() == "")
+            {
+                MessageBox.Show("Debe ingresar el porcetnaje de descuento", "Validaciones", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                txtCliente.Focus();
+                return;
+            }
+
             GuardarPresupuesto();
         }
 
@@ -200,7 +213,7 @@ namespace Carpinteria_Refactorizado.gui
 
             if(banderaUpdate)
             {
-                if (oPresupuesto.Actualizar())
+                if (gestor.ActualizarPresupuesto(oPresupuesto))
                 {
                     MessageBox.Show("Presupuesto Actualizado", "Informe", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     this.Dispose();
@@ -232,102 +245,20 @@ namespace Carpinteria_Refactorizado.gui
             }
         }
 
-        // -------------------------------- UPDATE -------------------------------------
-        internal void CargarDatos(int idPresupuesto)
+        private void CargarPresupuesto(int idPresupuesto)
         {
-            SqlConnection cnn = new SqlConnection();
+            this.oPresupuesto = gestor.ObtenerPresupuestoPorID(idPresupuesto);
+            txtCliente.Text = oPresupuesto.Cliente;
+            txtFecha.Text = oPresupuesto.Fecha.ToString("dd/MM/yyyy");
+            txtDescuento.Text = oPresupuesto.Descuento.ToString();
+            lblNro.Text = "Presupuesto Nro: " + oPresupuesto.PresupuestoNro.ToString();
 
-            try
+            dgvDetalles.Rows.Clear();
+            foreach (DetallePresupuesto oDetalle in oPresupuesto.Detalles)
             {
-                cnn.ConnectionString = @"Data Source=LAPTOP-8EMNHC7Q;Initial Catalog=carpinteria_db;Integrated Security=True";
-                cnn.Open();
-
-                oPresupuesto.PresupuestoNro = idPresupuesto;
-                cargarPresupuesto(cnn, idPresupuesto);
-                cargarDetalles(cnn, idPresupuesto);
-                calcularTotales();
+                dgvDetalles.Rows.Add(new object[] { "", oDetalle.Producto.Nombre, oDetalle.Producto.Precio, oDetalle.Cantidad, oDetalle.CalcularSubtotal() }); ;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error al cargar los Presupuestos");
-            }
-            finally
-            {
-                if (cnn != null && cnn.State == ConnectionState.Open)
-                {
-                    cnn.Close();
-                }
-            }
-        }
-
-        private void cargarDetalles(SqlConnection cnn, int idPresupuesto)
-        {
-            SqlCommand cmd = new SqlCommand("SP_CARGAR_DETALLES", cnn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@presupuesto_nro", idPresupuesto);
-
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            int presupuesto_nro;
-            int detalle_nro;
-            int id_producto;
-            string producto;
-            decimal precio;
-            int cantidad;
-
-            DetallePresupuesto item = new DetallePresupuesto();
-            Producto oProducto = new Producto();
-
-
-
-            while (reader.Read())
-            {
-                presupuesto_nro = reader.GetInt32(0);
-                detalle_nro = reader.GetInt32(1);
-                id_producto = reader.GetInt32(2);
-                producto = reader.GetString(3);
-                precio = reader.GetDecimal(4);
-                cantidad = reader.GetInt32(5);
-
-                item.Cantidad = cantidad;
-                oProducto.IdProducto = id_producto;
-                oProducto.Nombre = producto;
-                oProducto.Precio = Double.Parse(precio.ToString());
-                item.Producto = oProducto;
-                oPresupuesto.AgregarDetalle(item);
-
-                dgvDetalles.Rows.Add(new object[] { "", oProducto.Nombre, oProducto.Precio, item.Cantidad, item.CalcularSubtotal() });
-
-            }
-            reader.Close();
-        }
-
-        private void cargarPresupuesto(SqlConnection cnn, int idPresupuesto)
-        {
-            SqlCommand cmd = new SqlCommand("SP_CARGAR_PRESUPUESTOS", cnn);
-            cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@presupuesto_nro", idPresupuesto);
-
-            SqlDataReader reader = cmd.ExecuteReader();
-
-            int presupuesto_nro;
-            DateTime fecha;
-            string cliente;
-            decimal descuento;
-
-            while (reader.Read())
-            {
-                presupuesto_nro = reader.GetInt32(0);
-                fecha = reader.GetDateTime(1);
-                cliente = reader.GetString(2);
-                descuento = reader.GetDecimal(3);
-
-                lblNro.Text += presupuesto_nro;
-                txtFecha.Text = fecha.ToShortDateString();
-                txtCliente.Text = cliente;
-                txtDescuento.Text = descuento.ToString();
-            }
-            reader.Close();
+            calcularTotales();
         }
     }
 }
