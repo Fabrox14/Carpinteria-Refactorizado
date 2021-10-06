@@ -26,8 +26,9 @@ namespace Carpinteria_Refactorizado.gui
     {
         private Presupuesto oPresupuesto;
         private GestorPresupuesto gestor;
-        private bool banderaUpdate = false;
         private Accion modo;
+
+        private bool banderaUpdate = false;
 
         public Frm_Alta_Presupuesto(Accion modo, int nro_presupuesto)
         {
